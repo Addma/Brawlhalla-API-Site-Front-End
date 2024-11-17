@@ -119,8 +119,8 @@ export default function RankingsSearch() {
             <p><Link className='text-blue-500 cursor-pointer' to={`/profile/${data.brawlhalla_id}`} >Profile</Link></p>
             <p>Rating: {data.rating} - {data.tier}</p>
         </div>
-        </div>) : refresh ? <Refresh style={refresh ? rotatingStyle : {}} onClick={() => refreshData()} className={`w-16 h-16 cursor-pointer delay-500 ${refreshClicked ? 'animate-spin-ease-out' : ''}`} ><p>{errorMsg}</p> </Refresh> : <Loading className='w-16 h-16'/>}
-             </div>   
+        </div>) : refresh ? <Refresh onClick={() => refreshData()} className={`w-16 h-16 cursor-pointer delay-500 ${refreshClicked ? 'animate-spin-ease-out' : ''}`} ><p>{errorMsg}</p> </Refresh> : <Loading className='w-16 h-16'/>}
+             </div>
 </div>}
 
         </div>

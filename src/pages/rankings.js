@@ -40,8 +40,8 @@ export default function Rankings(){
     }, [params])
 
     return (
-        <div className='w-3/5 text-center min-h-[50vh] bg-gray-500 rounded-xl'>
-            <div>
+        <div className='w-2/5 text-center rounded-xl m-auto'>
+            <div className='flex flex-col gap-2'>
             {Object.keys(rankingSearch).length > 0 ? 
             rankingSearch.map((player, i) => {
                 return (
