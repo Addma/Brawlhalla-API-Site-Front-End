@@ -1,75 +1,103 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Landing from './landing';
 import Nav from '../components/nav';
-import { Link, Outlet, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Outlet, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import apiIndex from '../resources/api-index';
 import axios from 'axios';
 import {ReactComponent as Loading} from '../resources/loading.svg';
 import {ReactComponent as Refresh} from '../resources/undo.svg';
+import OneVsOneCard from '../components/1v1Card';
+import RotatingModeCard from '../components/RotatingModeCard';
+import TwoVsTwoCard from '../components/2v2Card';
 export default function RankingsSearch() {
     let params = useParams();
+    let regions = ['us-e', 'us-w', 'eu', 'brz', 'aus', 'sea']
+    let brackets = ['1v1', '2v2', 'kungfoot']
+    const location = useLocation();
 
-    let [page, setPage] = useState(1);
-    let [region, setRegion] = useState("us-e");
-    let [bracket, setBracket] = useState("1v1")
     let [pageData, setPageData] = useState([]);
     let [legends, setLegends] = useState(localStorage.getItem("legends"));
     let [openRegion, setOpenRegion] = useState(false);
     let [openBracket, setOpenBracket] = useState(false);
     let [refresh, setRefresh] = useState(false);
-    let [refreshClicked, setRefresClicked] = useState(false);
+    let [refreshClicked, setRefreshClicked] = useState(false);
     let [errorMsg, setErrorMsg] = useState('')
-    const rotatingStyle = {
-        display: 'inline-block',
-        animation: 'rotate(360deg) 1s ease-out'
-      };
+    let [page, setPage] = useState(location.state?.page || 1);
+    let [region, setRegion] = useState(location.state?.region || regions[0]);
+    let [bracket, setBracket] = useState(location.state?.bracket || brackets[0])
+    const [loading, setLoading] = useState(false);
+    const bracketRef = useRef(null);
+    const regionRef = useRef(null);
+    const [state, setState] = useState({
+        page: location.state?.page || page,
+        region: location.state?.region || region,
+        bracket: location.state?.bracket || bracket,
+        fromPage: location.pathname})
+    
     useEffect(() => {
             retrievePlayers();
 
     }, [])
     useEffect(() => {
-        if (refresh && legends.length > 0 && pageData.length > 0) {
-            setRefresh(false);
-        }
-        console.log("REFRESHED");
-        if (refreshClicked && legends.length > 0 && pageData.length > 0) {
-            setRefresClicked(false);
-        }
-    }, [legends.length, pageData.length, refresh, refreshClicked])
+        setLoading(true);
+        retrievePlayers();
+        setState({...state, page: page, region: region,bracket: bracket})
+}, [region, page, bracket])
 
     const retrievePlayers = async () => {
+        console.log(loading);
         try {
+            setLoading(true);
             const res = await axios.get(apiIndex.rankingsPages(bracket, region, page))
+            console.log(res.data);
             setPageData(res.data);
-            
         }
         catch(err) {
             console.log(err.message);
-            setRefresh(true);
-            setRefresClicked(false);
+            setRefresh(true); 
+            setRefreshClicked(false);
             setErrorMsg(err.message);
+        } finally {
+            setLoading(false);
         }
 
     }
+    useEffect(() => {
+        function checkClick(e) {
+            if (openBracket || openRegion){
+                if (e.target !== bracketRef.current && e.target !== regionRef.current) {
+                    setOpenRegion(false);
+                    setOpenBracket(false);
+            }  
+            }
+ 
+    }
+        if (openRegion || openBracket) {
+            window.addEventListener('click', checkClick);
+        }
+
+        return () => {
+            window.removeEventListener('click', checkClick);
+        }
+    }, [openRegion, openBracket])
     const retrieveLegends = async () => {
         try {
             let arr = []
             const res = await axios.get(apiIndex.allLegends())
-            res.data.forEach(element => {
+                res.data.forEach(element => {
                 arr[element.legend_id] = element
             })
             setLegends(arr);
         } catch(err) {
-            console.log(err);
-            setRefresh(true);
-            setRefresClicked(false);
             setErrorMsg(err.message);
-
+        } finally {
+            setRefresh(true);
+            setRefreshClicked(false);
         }
 
     }
     const refreshData = () => {
-        setRefresClicked(true);
+        setRefreshClicked(true);
         if (pageData.length === 0)
             retrievePlayers();
         if (legends.length === 0)
@@ -79,50 +107,43 @@ export default function RankingsSearch() {
         <div>
         {pageData && legends &&
 <div>
-    <div className='flex justify-center content-center text-xl space-x-4 items-center bg-white overscroll-y-contain'> 
-            Region:         
-            <div onClick={() => setOpenRegion(!openRegion)} className="inline-flex justify-center font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {region} 
-            {openRegion && <div className='flex flex-col'>
-                <div className='absolute' onClick={() => setRegion('us-w')}>us-w</div>
-                <div className='absolute' onClick={() => setRegion('eu')}>eu</div>
-                <div className='absolute' onClick={() => setRegion('brz')}>brz</div>
-                <div className='absolute' onClick={() => setRegion('aus')}>aus</div>
-                <div className='absolute' onClick={() => setRegion('sea')}>sea</div>
+    <div className='flex justify-center content-center text-xl space-x-4 items-center bg-white h-[50px]'> 
+            <div className="font-medium text-gray-700 flex gap-4">
+                    <span className='flex'>Region:
+            <div className='absolute relative  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer whitespace-nowrap' onClick={() => setOpenRegion(!openRegion)} ref={regionRef}>
+                {region}
+                    {openRegion && <div className='absolute bg-white w-fit border-black border-2 border-t-0' >
+                        {regions.map(regionEl => 
+
+                region !== regionEl && <div className='p-1' onClick={() => {setPage(1);setRegion(regionEl)}}>{regionEl}</div>
+                        )}
                 </div>}
-            </div>
-            <div onClick={() => setOpenBracket(!openBracket)} className="inline-flex justify-center font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Bracket:
-            {bracket} 
-            {openBracket && <div>
-                <div className='absolute' onClick={() => setBracket('2v2')}>2v2</div>
-                <div className='absolute' onClick={() => setBracket('kungfoot')}>kungfoot</div>
+                </div></span>
+                <span className='flex'>Bracket:
+            <div className=' relative hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer whitespace-nowrap' onClick={() => setOpenBracket(!openBracket)} ref={bracketRef}>
+                {bracket}
+                    {openBracket && <div className='absolute bg-white w-fit border-black border-2 border-t-0' >
+                {bracket !== '1v1' && <div className='p-1' onClick={() => {setPage(1);setPageData([]);setBracket('1v1')}}>1v1</div>}
+                {bracket !== '2v2' && <div className='p-1' onClick={() => {setPage(1);setPageData([]);setBracket('2v2')}}>2v2</div>}
+                {/*bracket !== 'kungfoot' && <div className='p-1' onClick={() => {setPage(1);setBracket('kungfoot')}}>kungfoot</div>*/}
                 </div>}
+                </div></span>
             </div>
         <span className='cursor-pointer' onClick={e => setTimeout(setPage(1), 1000)}>{"<"}</span>
         <span className='cursor-pointer' onClick={e => setTimeout(page - 1 > 0 && setPage(page-1), 1000)}>{page > 1 ? page-1 : "..." }</span> 
         <span className='text-3xl cursor-pointer'>{page}</span> 
         <span className='cursor-pointer' onClick={e => setTimeout(setPage(page+1), 1000)} >{page+1}</span>
-        <span className='cursor-pointer' onClick={e => setTimeout(setPage(50), 1000)}>{">"}</span>
+        <span className='cursor-pointer' onClick={e => setTimeout(setPage(page + 50 - ((page + 50) % 50)), 1000)}>{">"}</span>
         </div>
-        <div className='grid gap-4 grid-cols-1 md:grid-cols-2 p-4 justify-center place-content-center place-self-center'>
-        {pageData.length > 0 && legends.length > 0 ? pageData.map((data, i)=> <div key={i} className="text-left bg-gray-50 rounded border-black border-2 hover:bg-blue-100 p-2">
-        <p>{page == 1 ? i + 1 : ((page-1) * 50) + (i+1)}. {data.name} - Peak: {data.peak_rating}</p>
-        <p>Best Legend: {legends[data.best_legend].bio_name}<br/>
-            <span className='text-lime-500'>W {data.best_legend_wins + "\t"} </span>
-            <span className='text-red-500'>L {data.best_legend_games - data.best_legend_wins}</span>
-        </p>
-        <div>
-            Total: 
-            <span className='text-lime-500'>W {data.wins + "\t"} </span>
-            <span className='text-red-500'>L {data.games - data.wins}</span>
-            <p><Link className='text-blue-500 cursor-pointer' to={`/profile/${data.brawlhalla_id}`} >Profile</Link></p>
-            <p>Rating: {data.rating} - {data.tier}</p>
-        </div>
-        </div>) : refresh ? <Refresh onClick={() => refreshData()} className={`w-16 h-16 cursor-pointer delay-500 ${refreshClicked ? 'animate-spin-ease-out' : ''}`} ><p>{errorMsg}</p> </Refresh> : <Loading className='w-16 h-16'/>}
-             </div>
-</div>}
+        {pageData.length > 0 && legends ?
+                <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 justify-center place-content-center place-self-center w-full 2xl:w-4/5'>
 
+        {pageData.map((data, i)=> {
+            return bracket === '1v1' ? <OneVsOneCard state={state} data={data} key={i} number={page == 1 ? i + 1 : ((page-1) * 50) + (i+1)}/> : bracket === '2v2' ? <TwoVsTwoCard state={state} data={data} key={i} number={page == 1 ? i + 1 : ((page-1) * 50) + (i+1)}/> : <RotatingModeCard state={state} data={data} number={page == 1 ? i + 1 : ((page-1) * 50) + (i+1)}/>
+        })}
+                     </div>
+         : refresh ? <Refresh onClick={() => refreshData()} className={`w-16 h-16 cursor-pointer delay-500 m-auto ${refreshClicked ? 'animate-spin-ease-out' : ''}`} ><p className='text-center'>{errorMsg}</p> </Refresh> : <Loading className='w-16 h-16 m-auto'/>}
+</div>}
         </div>
     )
 

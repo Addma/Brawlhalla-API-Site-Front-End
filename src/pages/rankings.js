@@ -3,16 +3,31 @@
 import React, { useCallback, useEffect, useState} from 'react';
 import Landing from './landing';
 import Nav from '../components/nav';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import apiIndex from '../resources/api-index';
 import axios from 'axios';
-
+import {ReactComponent as Loading} from '../resources/loading.svg';
+import {ReactComponent as Refresh} from '../resources/undo.svg';
+import OneVsOneCard from '../components/1v1Card';
 export default function Rankings(){
-    let [searchParams] = useSearchParams();
     let params = useParams();
     let [rankingSearch, setRankingSearch] = useState({});
+    let [refresh, setRefresh] = useState(false);
+    let [refreshClicked, setRefreshClicked] = useState(false);
+    const location = useLocation();
+    console.log(location)
+    let state = {
+        fromPage: location.pathname
+    }
+    let [errorMsg, setErrorMsg] = useState('');
     let nav = useNavigate();
     console.log(params);
+
+    const refreshData = () => {
+        setErrorMsg('');
+        setRefreshClicked(true);
+        retrieveRankingsData();
+    }
     const retrieveRankingsData = async () => {
         console.log("RANKINGS");
         try {
@@ -22,14 +37,22 @@ export default function Rankings(){
                 const res = await axios.get(apiIndex.rankings(params.bracket, params.region, params.page, params.name));
                 console.log(res);
                 console.log(res.data);
-                if (res.status == 200) {
+                if (res.status == 200 && res.data.length > 0) {
                     setRankingSearch(res.data);
+                } else {
+                    setErrorMsg("Not found");
+                    setRefresh(true);
+                    setRefreshClicked(false);
+                    setRankingSearch({});
                 }
             }
 
         }
         catch (err) {
             console.log(err);
+            setRefresh(true);
+            setErrorMsg(err.message)
+            setRefreshClicked(false);
         }
 
     }
@@ -38,22 +61,19 @@ export default function Rankings(){
         retrieveRankingsData();
 
     }, [params])
-
     return (
-        <div className='w-2/5 text-center rounded-xl m-auto'>
-            <div className='flex flex-col gap-2'>
+        <div className='w-full rounded-xl flex justify-center'>
             {Object.keys(rankingSearch).length > 0 ? 
-            rankingSearch.map((player, i) => {
-                return (
-                    <div className='bg-stone-200 border-slate-200 rounded-lg m-2 p-2 cursor-pointer hover:scale-110' onClick={() => nav(`/profile/${player.brawlhalla_id}`)} key={i}>
-                        <p>{player.name} - Rank # {player.rank} {params.region.toLowerCase() === 'all' && '- ' + player.region}</p>
-                        <p>Peak: {player.peak_rating} Current: {player.rating}</p>
-
+                        <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 justify-center place-content-center place-self-center w-3/4'>
+                    {rankingSearch.map((player, i) => {
+                            return (
+                                <OneVsOneCard data={player} state={state} number={player.rank}/>
+                            )
+                        })}
                         </div>
-                )
-            })
-                : <h1>Not found</h1>}
-            </div>
+            : refresh ? <div className='flex justify-center flex-col place-items-center'><Refresh onClick={() => refreshData()} className={`w-16 h-16 cursor-pointer delay-500 ${refreshClicked ? 'animate-spin-ease-out' : ''}`} /> <p>{errorMsg}</p></div> 
+             : <div><Loading onClick={() => refreshData()} className='w-16 h-16' /></div>}
+
         </div>
     )
 
