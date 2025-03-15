@@ -5,7 +5,7 @@ import apiIndex, { rankings } from "../resources/api-index";
 import {ReactComponent as Refresh} from "../resources/undo.svg";
 import {ReactComponent as Loading} from "../resources/loading.svg"
 import Ranked from '../components/ranked.tsx';
-import Stats from '../components/stats2';
+import Stats from '../components/stats.js';
 import Clan from '../components/clan';
 import useImageHeight from "../components/useImageHeight.js";
 const Profile = ({id}) => {

@@ -19,8 +19,9 @@ const OneVsOneCard =({data, number, state}) => {
             </div>  
             Rating: {data.rating} Peak: {data.peak_rating}
             <p className="text-center relative w-full flex justify-center items-center "  >            
-                 {data.best_legend <= legends.length - 1 && <img  src={legendsName} className=" rounded-3xl absolute z-10 bottom-[-50px] w-1/2 bg-slate-200 rounded-full"  />}
-                <img src={ranks[getTier(data.tier)]} className=" w-1/2  " />
+                 {data.best_legend <= legends.length - 1 &&
+                <img loading="lazy" src={legendsName} className=" rounded-3xl absolute z-10 bottom-[-50px] w-1/2 bg-slate-200 rounded-full"  />}
+                <img loading="lazy" src={ranks[getTier(data.tier)]} className=" w-1/2  " />
            </p>
             <Link className ='text-blue-500 cursor-pointer text-7xl hover:text-blue-700 p-1 justify-self-end place-self-end' to={`/profile/${data.brawlhalla_id}`} state={state}>{">"}</Link>
         </div>

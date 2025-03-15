@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Routes, Route, createBrowserRouter, createRoutesFromElements, Outlet} from "react-router-dom";
 import Rankings from './pages/rankings'
-import Landing from './pages/landing'
+import Landing from './pages/landing.tsx'
 import About from './pages/about'
 import Profile from './pages/profile';
 import Nav from './components/nav';

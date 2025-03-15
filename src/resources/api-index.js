@@ -9,12 +9,16 @@ module.exports = {
         `${url}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}?name=${name}`
     ,
     rankingsPages: (bracket, region, page) => `${url}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}`,
-    steamSearch: (steamId) => `${url}/steam/getBrawlhallaIdBySteamId?steamId=${steamId}`,
+    steamLogin: () => `${url}/steam/login`,
+    steamVerify: () => `${url}/steam/verify`,
     brawlhallaSearch: (steamId) => `${url}/brawlhalla/search/${steamId}`,
     playerStats: (brawlId) => `${url}/brawlhalla/player/${brawlId}/stats`,
     playerRanked: (brawlId) => `${url}/brawlhalla/player/${brawlId}/ranked`,
     clans: (clanId) => `${url}/brawlhalla/clan/${clanId}`,
     legends: (legendId) => `${url}/brawlhalla/legend/${legendId}`,
     allLegends: () => `${url}/brawlhalla/legend/all`,
-    retrieveData: (brawlhallaId) => `${url}/brawlhalla/retrievePlayerData?brawlhalla_id=${brawlhallaId}`
+    retrieveData: (brawlhallaId) => `${url}/brawlhalla/retrievePlayerData?brawlhalla_id=${brawlhallaId}`,
+    createUser: () => `${url}/users/createUser`,
+    deleteUser: (steamId) => `${url}/users/deleteUser/${steamId}`,
+    updateUser: () => `${url}/users/updateUser`
 }

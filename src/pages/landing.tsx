@@ -5,6 +5,8 @@ import Logo from '../images/Brawlhalla_Logo.webp';
 import apiIndex from '../resources/api-index';
 import axios from 'axios';
 import { brawlhallaImgs } from '../resources/image-index';
+import { User } from '../models/User';
+import { setCookie } from '../util/cookies';
 const Landing = () => {
     const [search, setSearch] = useState('');
     const [region, setRegion] = useState('ALL');
@@ -13,40 +15,12 @@ const Landing = () => {
     let [searchParams] = useSearchParams();
     let location = useLocation();
     const navigate = useNavigate();
-    const openidNs = searchParams.get('openid.ns');
-    const openidMode = searchParams.get('openid.mode');
-    const openidOpEndpoint = searchParams.get('openid.op_endpoint');
-    const openidClaimedId = searchParams.get('openid.claimed_id');
-    const openidIdentity = searchParams.get('openid.identity');
-    const openidReturnTo = searchParams.get('openid.return_to');
-    const openidResponseNonce = searchParams.get('openid.response_nonce');
-    const openidAssocHandle = searchParams.get('openid.assoc_handle');
-    const openidSigned = searchParams.get('openid.signed');
-    const openidSig = searchParams.get('openid.sig');
     useEffect(() => {
-        if (openidIdentity) {
-            getSteam();
-           }
-           if (localStorage.getItem("legends") == null) {
-                getLegends();
-           }
+        if (localStorage.getItem("legends") == null) {
+            getLegends();
+        }
     }, [])
 
-    async function getSteam() {
-        try {
-            let steamID = openidIdentity.split("/")[openidIdentity.split("/").length - 1];
-            let brawllhallAccFromSteamId = await axios.get(apiIndex.steamSearch(steamID))
-            if (brawllhallAccFromSteamId.status == 200) {
-                navigate(`/profile/${brawllhallAccFromSteamId.data.brawlhalla_id}`);
-            } else {
-                alert("Error retrieving steam account");
-            }
-        }
-        catch(err) {
-            console.log(err)
-            alert("Error has occurred: " + err.message)
-        }
-    }
 
     async function getLegends() {
         console.log("GET LEGNDS");
@@ -94,7 +68,7 @@ const Landing = () => {
                 <option value="AUS">AUS</option>
                 <option value="JPN">JPN</option>
             </select>
-            <input ref={searchInput} placeholder="Enter steam name" id="search" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={e => handlePress(e)} className='px-4 py-2 w-[500px]'></input>
+            <input ref={searchInput} placeholder="Enter steam name" id="search" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={e => handlePress(e)} className='px-4 py-2 lg:w-[500px]'></input>
             <button className='bg-blue-400 px-4 py-2 self-end rounded-tr rounded-br' onClick={() => navigate(`/rankings/${mode}/${region}/${search}/1`)} >Search</button>
 
             </div>

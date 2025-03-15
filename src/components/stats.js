@@ -96,10 +96,10 @@ const Stats = ({stats}) => {
             let gamesPerGadgetKO = (legend.games / legend.kogadgets).toFixed(0);
             let gamesPerUnarmedKO = (legend.games / legend.kounarmed).toFixed(0);
             let unarmedDmgPerGame = (legend.damageunarmed / legend.games).toFixed(1);
-            let unarmedKOsPerMin = (legend.kounarmed / (legend.matchtime - legend.timeheldweaponone - legend.timeheldweapontwo))
-            let unarmedDPS = (legend.damageunarmed / legend.matchtime);
+            let unarmedKOsPerMin = (legend.kounarmed / (legend.matchtime - legend.timeheldweaponone - legend.timeheldweapontwo)).toPrecision(2);
+            let unarmedDPS = (legend.damageunarmed / legend.matchtime).toPrecision(2);
             return (
-               <div key={i} onClick={e => {e.stopPropagation();!legend.openCard && setOpenCard(true, i); !legend.visible && setLegendVisible(true, i)}}   className={` bg-blue-500 p-4 transition-all ease-in duration-500 flex flex-col ${!legend.openCard && 'select-none cursor-pointer'}`}>
+               <div key={i} onClick={e => {console.log("OPEN", !legend.openCard);e.stopPropagation();!legend.openCard && setOpenCard(true, i); !legend.visible && setLegendVisible(true, i)}}   className={` bg-blue-500 p-4 transition-all ease-in duration-500 flex flex-col ${!legend.openCard && 'select-none cursor-pointer'}`}>
                 <h1  className={`text-4xl ${legend.openCard ? 'invisible' : 'visible'}`}>{capitalizeName(legend.legend_name_key)}</h1>
                 <div ref={ref => openCardRefs.current[i] = ref}  className={`overflow-hidden transition-all duration-1000 linear gap-y-2 flex flex-col p-2 ${legend.openCard ? 'max-h-[200vh] opacity-100' : 'max-h-0 opacity-0'} bg-white`} > 
                 <h1 className="text-black text-4xl">{capitalizeName(legend.legend_name_key)}</h1>
@@ -154,7 +154,7 @@ const Stats = ({stats}) => {
                                     <div className={`overflow-hidden transition-all duration-300 ease-in-out gap-4 flex flex-wrap ${legend.openUnarmed ? 'max-h-[200vh] opacity-100 border-b-2' : 'max-h-0 opacity-0'}`}> 
                                         <img src={`${weaponImgs.unarmed}`} className="w-[100px]"/>
                                         <p>Dmg/game {unarmedDmgPerGame}</p>
-                                        <p>DPS {weaponOneDmgPerSecond}</p>
+                                        <p>DPS {unarmedDPS}</p>
                                         <p>KOs/min {unarmedKOsPerMin}</p>
                                         <p>{timeHeldPerMatchWeaponOne}s time held per match</p>
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Landing from './landing';
 import Nav from '../components/nav';
 import { Link, Outlet, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import apiIndex from '../resources/api-index';
@@ -136,7 +135,7 @@ export default function RankingsSearch() {
         <span className='cursor-pointer' onClick={e => setTimeout(setPage(page + 50 - ((page + 50) % 50)), 1000)}>{">"}</span>
         </div>
         {pageData.length > 0 && legends ?
-                <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 justify-center place-content-center place-self-center w-full 2xl:w-4/5'>
+                <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-12 justify-center place-content-center place-self-center w-full 2xl:w-4/5'>
 
         {pageData.map((data, i)=> {
             return bracket === '1v1' ? <OneVsOneCard state={state} data={data} key={i} number={page == 1 ? i + 1 : ((page-1) * 50) + (i+1)}/> : bracket === '2v2' ? <TwoVsTwoCard state={state} data={data} key={i} number={page == 1 ? i + 1 : ((page-1) * 50) + (i+1)}/> : <RotatingModeCard state={state} data={data} number={page == 1 ? i + 1 : ((page-1) * 50) + (i+1)}/>

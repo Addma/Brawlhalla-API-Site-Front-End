@@ -1,7 +1,6 @@
 
 
 import React, { useCallback, useEffect, useState} from 'react';
-import Landing from './landing';
 import Nav from '../components/nav';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import apiIndex from '../resources/api-index';
@@ -64,7 +63,7 @@ export default function Rankings(){
     return (
         <div className='w-full rounded-xl flex justify-center'>
             {Object.keys(rankingSearch).length > 0 ? 
-                        <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 justify-center place-content-center place-self-center w-3/4'>
+                        <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  justify-center place-content-center place-self-center w-3/4'>
                     {rankingSearch.map((player, i) => {
                             return (
                                 <OneVsOneCard data={player} state={state} number={player.rank}/>
