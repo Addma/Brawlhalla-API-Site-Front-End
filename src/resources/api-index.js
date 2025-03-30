@@ -9,8 +9,8 @@ module.exports = {
         `${url}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}?name=${name}`
     ,
     rankingsPages: (bracket, region, page) => `${url}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}`,
-    steamLogin: () => `${url}/steam/login`,
-    steamVerify: () => `${url}/steam/verify`,
+    steamLogin: () => `${url}/api/auth/steam/login`,
+    steamVerify: () => `${url}/api/auth/steam/verify`,
     brawlhallaSearch: (steamId) => `${url}/brawlhalla/search/${steamId}`,
     playerStats: (brawlId) => `${url}/brawlhalla/player/${brawlId}/stats`,
     playerRanked: (brawlId) => `${url}/brawlhalla/player/${brawlId}/ranked`,
@@ -20,5 +20,6 @@ module.exports = {
     retrieveData: (brawlhallaId) => `${url}/brawlhalla/retrievePlayerData?brawlhalla_id=${brawlhallaId}`,
     createUser: () => `${url}/users/createUser`,
     deleteUser: (steamId) => `${url}/users/deleteUser/${steamId}`,
-    updateUser: () => `${url}/users/updateUser`
+    updateUser: () => `${url}/users/updateUser`,
+    getUser: () => `${url}/user`
 }
