@@ -1,25 +1,23 @@
-const url = "http://localhost:8080"
-const url2 = "http://localhost:3000"
-const apiKey = "api_key=1XP8NLHKTXVUK5K5ZPFQ"
-const steamKey = "B4CCEA866113E80126BBFAE55EB096CB"
+const urlBackend = "http://localhost:8080"
+const urlBackendFrontend = "http://localhost:3000"
 module.exports = {
-    url: url,
-    url2: url2,
+    urlBackend: urlBackend,
+    urlFrontend2: urlBackendFrontend,
     rankings: (bracket, region, page, name) => 
-        `${url}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}?name=${name}`
+        `${urlBackend}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}?name=${name}`
     ,
-    rankingsPages: (bracket, region, page) => `${url}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}`,
-    steamLogin: () => `${url}/api/auth/steam/login`,
-    steamVerify: () => `${url}/api/auth/steam/verify`,
-    brawlhallaSearch: (steamId) => `${url}/brawlhalla/search/${steamId}`,
-    playerStats: (brawlId) => `${url}/brawlhalla/player/${brawlId}/stats`,
-    playerRanked: (brawlId) => `${url}/brawlhalla/player/${brawlId}/ranked`,
-    clans: (clanId) => `${url}/brawlhalla/clan/${clanId}`,
-    legends: (legendId) => `${url}/brawlhalla/legend/${legendId}`,
-    allLegends: () => `${url}/brawlhalla/legend/all`,
-    retrieveData: (brawlhallaId) => `${url}/brawlhalla/retrievePlayerData?brawlhalla_id=${brawlhallaId}`,
-    createUser: () => `${url}/users/createUser`,
-    deleteUser: (steamId) => `${url}/users/deleteUser/${steamId}`,
-    updateUser: () => `${url}/users/updateUser`,
-    getUser: () => `${url}/user`
+    rankingsPages: (bracket, region, page) => `${urlBackend}/brawlhalla/rankings/${bracket}/${region.toLowerCase()}/${page}`,
+    steamLogin: () => `${urlBackend}/api/auth/steam/login`,
+    steamVerify: () => `${urlBackend}/api/auth/steam/verify`,
+    brawlhallaSearch: (steamId) => `${urlBackend}/brawlhalla/search/${steamId}`,
+    playerStats: (brawlId) => `${urlBackend}/brawlhalla/player/${brawlId}/stats`,
+    playerRanked: (brawlId) => `${urlBackend}/brawlhalla/player/${brawlId}/ranked`,
+    clans: (clanId) => `${urlBackend}/brawlhalla/clan/${clanId}`,
+    legends: (legendId) => `${urlBackend}/brawlhalla/legend/${legendId}`,
+    allLegends: () => `${urlBackend}/brawlhalla/legend/all`,
+    retrieveData: (brawlhallaId) => `${urlBackend}/brawlhalla/retrievePlayerData?brawlhalla_id=${brawlhallaId}`,
+    createUser: () => `${urlBackend}/users/createUser`,
+    deleteUser: (steamId) => `${urlBackend}/users/deleteUser/${steamId}`,
+    updateUser: () => `${urlBackend}/users/updateUser`,
+    getUser: () => `${urlBackend}/user`
 }
