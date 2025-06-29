@@ -23,7 +23,6 @@ const Clan = ({clan, name}) => {
             setAllCheck(!allCheck)
             if (!allCheck) {
                 setTotalXp(clan.clan_id.clan.reduce((accumulator, val) => {
-                    console.log(accumulator, val);
                     if (accumulator.xp) {
                         return parseInt(accumulator.xp) + parseInt(val.xp);
                     }

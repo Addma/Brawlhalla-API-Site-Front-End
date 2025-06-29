@@ -23,7 +23,6 @@ const Landing = () => {
 
 
     async function getLegends() {
-        console.log("GET LEGNDS");
         try {
             let legends = await axios.get(apiIndex.allLegends())
             

@@ -1,7 +1,6 @@
 export function setCookie(cookieName, expDate, cookieValue) {
     let cookieStr = document.cookie;
     cookieStr += `${cookieName}=${cookieValue}; expires=${expDate};path=/`;
-    console.log("COOKIESTR", cookieStr)
     document.cookie = cookieStr;
 }
 

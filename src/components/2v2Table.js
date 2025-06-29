@@ -7,11 +7,9 @@ const TwoVsTwoTable = ({sorted2v2, id, name}) => {
     const navigate = useNavigate();
     
     const getTeammate = (teammate) =>  {
-      console.log("TEAMMATE", teammate);
         if (teammate.brawlhalla_id_one === teammate.brawlhalla_id_two) 
           return {id: 0, name: ''};
         let teamnames = teammate.teamname.split("+");
-        console.log(teamnames);
         let player2 = {
           id: id == teammate.brawlhalla_id_one ? teammate.brawlhalla_id_two : teammate.brawlhalla_id_one, 
           name: teamnames[0] === name ? teamnames[1] : teamnames[0], }
@@ -34,7 +32,6 @@ const TwoVsTwoTable = ({sorted2v2, id, name}) => {
         
         {sorted2v2.map((e, i) => {
           let teammate = getTeammate(e);
-          console.log(teammate);
           return teammate.id != 0 && <tr key={i}>
             <td className="border-2 border-black p-1 text-center" ><span className="cursor-pointer" onClick={ev => navigate(`/profile/${teammate.id}`)}>{teammate.name}</span></td>
             <td className="border-2 border-black p-1 text-center">{e.peak_rating}</td>

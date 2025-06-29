@@ -14,13 +14,11 @@ export default function Rankings(){
     let [refresh, setRefresh] = useState(false);
     let [refreshClicked, setRefreshClicked] = useState(false);
     const location = useLocation();
-    console.log(location)
     let state = {
         fromPage: location.pathname
     }
     let [errorMsg, setErrorMsg] = useState('');
     let nav = useNavigate();
-    console.log(params);
 
     const refreshData = () => {
         setErrorMsg('');
@@ -28,14 +26,9 @@ export default function Rankings(){
         retrieveRankingsData();
     }
     const retrieveRankingsData = async () => {
-        console.log("RANKINGS");
         try {
-            console.log(params.bracket, params.name, params.page, params.region)
             if (params.bracket && params.region && params.name && params.page) {
-                console.log(params.bracket, params.name, params.page, params.region)
                 const res = await axios.get(apiIndex.rankings(params.bracket, params.region, params.page, params.name));
-                console.log(res);
-                console.log(res.data);
                 if (res.status == 200 && res.data.length > 0) {
                     setRankingSearch(res.data);
                 } else {

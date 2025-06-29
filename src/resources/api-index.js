@@ -19,5 +19,9 @@ module.exports = {
     createUser: () => `${urlBackend}/users/createUser`,
     deleteUser: (steamId) => `${urlBackend}/users/deleteUser/${steamId}`,
     updateUser: () => `${urlBackend}/users/updateUser`,
-    getUser: () => `${urlBackend}/user`
+    getUser: () => `${urlBackend}/user`,
+    addComment: () => `${urlBackend}/api/comments/addComment`,
+    getReceivedComments: (brawlhallaId) => `${urlBackend}/api/comments/getReceivedComments?brawlhalla_id=${brawlhallaId}`,
+    upvoteComment: (commentId) => `${urlBackend}/api/comments/upvote/${commentId}`,
+    downvoteComment: (commentId) => `${urlBackend}/api/comments/downvote/${commentId}`
 }

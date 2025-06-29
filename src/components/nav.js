@@ -13,25 +13,8 @@ const Nav = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const {isAuthenticated, user, logout, login} = useContext(AuthContext);
-
-    useEffect(() => {
-        const retrieveUser = async () => {
-            try {
-                let verifyLogin = await axios({
-                    method: "POST",
-                    url: apiIndex.steamVerify(),
-                    headers: {'Content-Type': 'application/json'},
-                    data: JSON.stringify(params)
-                })
-                let stringUser = JSON.stringify(verifyLogin.data);
-                sessionStorage.setItem("user", stringUser);
-                console.log("SET USER API", verifyLogin.data);
-              }
-              catch(err) {
-                console.log(err);
-              }
-        }
-        
+    console.log(user, "USER");
+    useEffect(() => {        
         const resizeObserver = new ResizeObserver(() => {
             setViewWidth(window.innerWidth);
         })
@@ -40,13 +23,8 @@ const Nav = () => {
 
         const params = {};
         searchParams.forEach( (value, key) => {
-            console.log(value, key, "PARAM");
           params[key] = value;
         });
-          if (params['openid.mode'] && params['openid.identity'])
-          { 
-            retrieveUser();
-          }
 
         return(() => {
             resizeObserver.disconnect();
@@ -69,7 +47,7 @@ const Nav = () => {
         {isAuthenticated ? 
         <div onClick={e => navigate(`/profile/${user.brawlhallaId}`)} className="cursor-pointer">
             <p>{user.name}</p>
-            <img src={user.avatar ? user.avatar : JSON.parse(user).avatar} alt="" />
+            <img src={user?.avatar} alt="" />
             <p onClick={() => logout()}>Log out</p>
         </div>
 
@@ -96,7 +74,7 @@ const Nav = () => {
                 <a onClick={e => navigate(`/profile/${user.brawlhallaId}`)} className="cursor-pointer h-6">
                     <p>{user.name}</p>
                     <img src={user.avatar ? user.avatar : JSON.parse(user).avatar} alt="" />
-                    <p onClick={logout}>Logouta</p>
+                    <p onClick={logout}>Logout</p>
                 </a> 
                 </div>
                 :

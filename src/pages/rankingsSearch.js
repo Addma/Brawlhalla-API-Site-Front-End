@@ -44,11 +44,9 @@ export default function RankingsSearch() {
 }, [region, page, bracket])
 
     const retrievePlayers = async () => {
-        console.log(loading);
         try {
             setLoading(true);
             const res = await axios.get(apiIndex.rankingsPages(bracket, region, page))
-            console.log(res.data);
             setPageData(res.data);
         }
         catch(err) {
@@ -111,7 +109,7 @@ export default function RankingsSearch() {
                     <span className='flex'>Region:
             <div className='absolute relative  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer whitespace-nowrap' onClick={() => setOpenRegion(!openRegion)} ref={regionRef}>
                 {region}
-                    {openRegion && <div className='absolute bg-white w-fit border-black border-2 border-t-0' >
+                    {openRegion && <div className='absolute bg-white w-fit border-black border-2 border-t-0 z-10' >
                         {regions.map(regionEl => 
 
                 region !== regionEl && <div className='p-1' onClick={() => {setPage(1);setRegion(regionEl)}}>{regionEl}</div>
@@ -121,7 +119,7 @@ export default function RankingsSearch() {
                 <span className='flex'>Bracket:
             <div className=' relative hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer whitespace-nowrap' onClick={() => setOpenBracket(!openBracket)} ref={bracketRef}>
                 {bracket}
-                    {openBracket && <div className='absolute bg-white w-fit border-black border-2 border-t-0' >
+                    {openBracket && <div className='absolute bg-white w-fit border-black border-2 border-t-0 z-10' >
                 {bracket !== '1v1' && <div className='p-1' onClick={() => {setPage(1);setPageData([]);setBracket('1v1')}}>1v1</div>}
                 {bracket !== '2v2' && <div className='p-1' onClick={() => {setPage(1);setPageData([]);setBracket('2v2')}}>2v2</div>}
                 {/*bracket !== 'kungfoot' && <div className='p-1' onClick={() => {setPage(1);setBracket('kungfoot')}}>kungfoot</div>*/}

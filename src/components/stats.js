@@ -33,7 +33,6 @@ const Stats = ({stats}) => {
         setLegends(legends.map((legend, i) => i === ind ? {...legend, visible: val} : legend))
     }
     useEffect(() => {
-        //console.log("LEGENDS", legends);
     }, [legends])
     function matchTimeFormat(matchTime) {
         let minutes = matchTime / 60;
@@ -50,7 +49,6 @@ const Stats = ({stats}) => {
             let hours = daysToHours(days % parseInt(days));
             let mins = hoursToMinutes(hours % parseInt(hours));
             let seconds = minutesToSeconds(mins % parseInt(mins));
-            console.log(hours);
             return `${parseInt(days)}D ${parseInt(hours)}H ${parseInt(mins)}M ${parseInt(seconds)}S played`
         }
     }
@@ -72,9 +70,6 @@ const Stats = ({stats}) => {
     return (
         <div className="flex flex-col gap-4">
         {legends.map((legend,i) => {
-            if (i == 0) {
-                console.log(matchTimeFormat(legend.matchtime))
-            }
             let matchTime = `${parseInt((legend.matchtime / 60)/legend.games) }m ${parseInt(minutesToSeconds(((legend.matchtime / 60)/legend.games) % parseInt((legend.matchtime / 60)/legend.games)))}s`
             let timeWeapon1 = (parseInt(legend.timeheldweaponone) / parseInt(legend.games)).toFixed(0)
             let timeWeapon2 = (parseInt(legend.timeheldweapontwo) / parseInt(legend.games)).toFixed(0)

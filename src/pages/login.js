@@ -12,7 +12,7 @@ const Login = () => {
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("token", token);
         const fetchUser = async () => {
             try {
                 const res =await axios.get(apiIndex.getUser(), {
@@ -20,13 +20,11 @@ const Login = () => {
                         Authorization: `Bearer ${token}`
                     }
                 })
+                console.log("SET USER LOGIN", res);
                 setUser(res.data);
                 navigate(`/profile/${res.data.brawlhallaId}`)
             } catch(err) {
-                console.error("Failed to fetch user data");
-                navigate('/login/error', {
-                    state: { message: "Failed to fetch user data"}
-                })
+                console.error("Failed to fetch user data", err);
             }
         }
         fetchUser();
